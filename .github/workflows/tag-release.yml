@@ -1,0 +1,55 @@
+name: Tag Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Calculate next version
+        id: next-version
+        run: |
+          # Get the highest tag number
+          CURRENT_VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)
+          echo "Current version: $CURRENT_VERSION"
+
+          # Strip leading 'v' and split into an array
+          VERSION_NUM=${CURRENT_VERSION#v}
+          IFS='.' read -r -a VERSION_PARTS <<< "$VERSION_NUM"
+
+          # Increment the version
+          MAJOR=${VERSION_PARTS[0]}
+          MINOR=${VERSION_PARTS[1]}
+          PATCH=${VERSION_PARTS[2]}
+          PATCH=$((PATCH + 1))
+
+          # Create new version
+          NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
+          echo "New version: $NEW_VERSION"
+          echo "::set-output name=tag::$NEW_VERSION"
+
+      - name: Create new tag
+        run: |
+          git tag ${{ steps.next-version.outputs.tag }}
+          git push origin ${{ steps.next-version.outputs.tag }}
+
+      - name: Post comment
+        run: gh issue comment "$NUMBER" --repo "$REPO" --body "$BODY"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          NUMBER: ${{ github.event.issue.number }}
+          REPO: ${{ github.repository }}
+          BODY: >
+            "A new version ${{ needs.tag.outputs.tag }} has been created successfully."
