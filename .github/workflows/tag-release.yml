@@ -52,12 +52,20 @@ jobs:
           git tag ${{ steps.next-version.outputs.tag }}
           git push origin ${{ steps.next-version.outputs.tag }}
 
+      # - name: Post comment
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      #     NUMBER: ${{ github.event.number }}
+      #     REPO: ${{ github.repository }}
+      #     BODY: A new version ${{ needs.tag.outputs.tag }} has been created successfully.
+      #   run: |
+      #     echo $GITHUB_TOKEN | gh auth login --with-token
+      #     gh issue comment $NUMBER --repo $REPO --body "$BODY"
+
       - name: Post comment
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          NUMBER: ${{ github.event.number }}
-          REPO: ${{ github.repository }}
-          BODY: A new version ${{ needs.tag.outputs.tag }} has been created successfully.
-        run: |
-          echo $GITHUB_TOKEN | gh auth login --with-token
-          gh issue comment $NUMBER --repo $REPO --body "$BODY"
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          repository: ${{ github.repository }}
+          issue-number: ${{ github.event.issue.number }}
+          body: "A new version ${{ needs.tag.outputs.tag }} has been created successfully."
