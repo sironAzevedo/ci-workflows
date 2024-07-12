@@ -52,9 +52,22 @@ jobs:
           git tag ${{ steps.next-version.outputs.tag }}
           git push origin ${{ steps.next-version.outputs.tag }}
 
-      - name: Post comment
-        uses: dacbd/create-issue-action@main
-        with:
-          token: ${{ secrets.GH_TOKEN }}
-          title: Nova versão disponibilzada
-          body: "A new version ${{ needs.tag.outputs.tag }} has been created successfully."
+    comment:
+      needs: tag
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Post comment
+          uses: dacbd/create-issue-action@main
+          with:
+            token: ${{ secrets.GH_TOKEN }}
+            title: Nova versão disponibilzada
+            body: "A new version ${{ needs.tag.outputs.tag }} has been created successfully." 
+      
+      
+      # - name: Post comment
+      #   uses: dacbd/create-issue-action@main
+      #   with:
+      #     token: ${{ secrets.GH_TOKEN }}
+      #     title: Nova versão disponibilzada
+      #     body: "A new version ${{ needs.tag.outputs.tag }} has been created successfully."
