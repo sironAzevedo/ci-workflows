@@ -22,7 +22,7 @@ jobs:
         id: next-version
         run: |
           # Get the highest tag number
-          CURRENT_VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)
+          CURRENT_VERSION=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null || echo "v0.0.0")
           echo "Current version: $CURRENT_VERSION"
 
           # Strip leading 'v' and split into an array
