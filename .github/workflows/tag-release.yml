@@ -35,10 +35,20 @@ jobs:
           PATCH=${VERSION_PARTS[2]}
           PATCH=$((PATCH + 1))
 
+          # Loop to find the next available tag
+          while git rev-parse "v$MAJOR.$MINOR.$PATCH" >/dev/null 2>&1; do
+            PATCH=$((PATCH + 1))
+          done
+
           # Create new version
           NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
           echo "New version: $NEW_VERSION"
           echo "::set-output name=tag::$NEW_VERSION"
+
+      - name: Create new tag
+        run: |
+          git tag ${{ steps.next-version.outputs.tag }}
+          git push origin ${{ steps.next-version.outputs.tag }}
 
       - name: Create new tag
         run: |
