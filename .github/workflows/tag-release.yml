@@ -51,6 +51,8 @@ jobs:
         run: |
           git tag ${{ steps.next-version.outputs.tag }}
           git push origin ${{ steps.next-version.outputs.tag }}
+    outputs:
+      new_tag: ${{ steps.next-version.outputs.tag }}
 
   comment:
     needs: tag
@@ -62,12 +64,4 @@ jobs:
         with:
           token: ${{ secrets.GH_TOKEN }}
           title: Nova versão disponibilzada
-          body: "A new version ${{ needs.tag.outputs.tag }} has been created successfully." 
-      
-      
-      # - name: Post comment
-      #   uses: dacbd/create-issue-action@main
-      #   with:
-      #     token: ${{ secrets.GH_TOKEN }}
-      #     title: Nova versão disponibilzada
-      #     body: "A new version ${{ needs.tag.outputs.tag }} has been created successfully."
+          body: "A new version ${{ needs.tag.outputs.new_tag }} has been created successfully."
