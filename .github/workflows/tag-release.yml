@@ -57,5 +57,5 @@ jobs:
         with:
           token: ${{ secrets.GH_TOKEN }}
           repository: ${{ github.repository }}
-          issue-number: ${{ github.event.pull_request.number || github.sha }}
+          commit-id: ${{ github.sha }}
           body: "A new version ${{ needs.tag.outputs.tag }} has been created successfully."
