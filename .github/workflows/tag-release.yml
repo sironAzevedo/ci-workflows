@@ -46,10 +46,12 @@ jobs:
           git push origin ${{ steps.next-version.outputs.tag }}
 
       - name: Post comment
-        run: gh issue comment "$NUMBER" --repo "$REPO" --body "$BODY"
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NUMBER: ${{ github.event.issue.number }}
           REPO: ${{ github.repository }}
           BODY: >
-            "A new version ${{ needs.tag.outputs.tag }} has been created successfully."
+            A new version ${{ needs.tag.outputs.tag }} has been created successfully.
+        run: |
+          gh auth login --with-token $GITHUB_TOKEN
+          gh issue comment $NUMBER --repo $REPO --body "$BODY"
