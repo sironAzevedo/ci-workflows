@@ -33,7 +33,6 @@ jobs:
           MAJOR=${VERSION_PARTS[0]}
           MINOR=${VERSION_PARTS[1]}
           PATCH=${VERSION_PARTS[2]}
-          PATCH=$((PATCH + 1))
 
           # Loop to find the next available tag
           while git rev-parse "v$MAJOR.$MINOR.$PATCH" >/dev/null 2>&1; do
