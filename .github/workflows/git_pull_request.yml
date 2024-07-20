@@ -3,9 +3,10 @@ name: Pull Request
 on:
   workflow_call:
     inputs:
-      github-access-token:
-        description: 'A token passed from the caller workflow'
+      GITHUB_TOKEN:
+        description: 'GitHub token'
         required: true
+        type: string
 
 jobs:
   create_pr:
@@ -18,7 +19,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ inputs.github-access-token }}
+          token: ${{ inputs.GITHUB_TOKEN }}
           commit-message: 'Automatic PR: Merge changes to main'
           branch: ${{ github.ref }}
           base: main

@@ -7,9 +7,10 @@ on:
         required: true
         type: string
         default: '17'
-      github-access-token:
-        description: 'A token passed from the caller workflow'
+      GITHUB_TOKEN:
+        description: 'GitHub token'
         required: true
+        type: string
 
 jobs:
   build:
@@ -27,7 +28,7 @@ jobs:
         echo "<settings><servers><server><id>github</id><username>\${env.GITHUB_ACTOR}</username><password>\${env.GITHUB_TOKEN}</password></server></servers></settings>" > ~/.m2/settings.xml
       env:
         GITHUB_ACTOR: ${{ github.actor }}
-        GITHUB_TOKEN: ${{ inputs.github-access-token }}
+        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
     - name: Cache Maven dependencies
       uses: actions/cache@v3
       with:
@@ -38,4 +39,4 @@ jobs:
     - name: Build with Maven
       run: mvn clean install -DskipTests
       env:
-        GITHUB_TOKEN: ${{ inputs.github-access-token }}
+        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
