@@ -19,12 +19,16 @@ jobs:
     uses: your-username/ci-workflows/.github/workflows/build.yml@v1.0.0
     with:
       java-version: '17'
+      github-access-token: 'token_do_seu_github'
 
   test:
     uses: your-username/ci-workflows/.github/workflows/test.yml@v1.0.0
     with:
       java-version: '17'
+      github-access-token: 'token_do_seu_github'
 
   create_pr:
     needs: [build, test]
-    uses: your-username/ci-workflows/.github/workflows/test.yml@v1.0.0
+    uses: your-username/ci-workflows/.github/workflows/git_pull_request.yml@v1.0.0
+    with:
+      github-access-token: 'token_do_seu_github'
