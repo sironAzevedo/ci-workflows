@@ -7,24 +7,27 @@ on:
         required: true
         type: string
         default: '17'
+      github-access-token:
+        description: 'A token passed from the caller workflow'
+        required: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Set up JDK 17
+    - name: Set up JDK
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
-        java-version: 17
+        java-version: ${{ inputs.java-version }}
     - name: Configure Maven settings
       run: |
         mkdir -p ~/.m2
         echo "<settings><servers><server><id>github</id><username>\${env.GITHUB_ACTOR}</username><password>\${env.GITHUB_TOKEN}</password></server></servers></settings>" > ~/.m2/settings.xml
       env:
         GITHUB_ACTOR: ${{ github.actor }}
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        GITHUB_TOKEN: ${{ inputs.github-access-token }}
     - name: Cache Maven dependencies
       uses: actions/cache@v3
       with:
@@ -35,4 +38,4 @@ jobs:
     - name: Build with Maven
       run: mvn clean install -DskipTests
       env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        GITHUB_TOKEN: ${{ inputs.github-access-token }}

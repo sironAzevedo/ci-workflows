@@ -1,5 +1,7 @@
 name: Tag Release
 
+#Não modificar esse workflow, o mesmo serve para criar a tag desse repositorio
+
 on:
   push:
     branches:
