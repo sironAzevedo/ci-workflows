@@ -81,10 +81,10 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ inputs.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: 'Automatic PR: Merge changes to main'
-          branch: ${{ github.ref }}
+          branch: ${{ github.head_ref }}
           base: main
-          title: 'Automatic PR from ${{ github.ref }}'
+          title: 'Automatic PR from ${{ github.head_ref }}'
           body: |
-            Este PR foi criado automaticamente pelo fluxo de trabalho de CI para mesclar alterações de ${{ github.ref }} para main.  
+            Este PR foi criado automaticamente pelo fluxo de trabalho de CI para mesclar alterações de ${{ github.head_ref }} para main.  
