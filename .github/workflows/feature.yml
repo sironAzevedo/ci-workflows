@@ -89,7 +89,7 @@ jobs:
         with:
           token: ${{ inputs.GITHUB_TOKEN }}
           commit-message: 'Automatic PR: Merge changes to main'
-          branch: ${{ github.ref }}
+          branch: ${{ github.head_ref }}
           base: main
           title: 'Automatic PR from ${{ github.ref_name }}'
           body: |
