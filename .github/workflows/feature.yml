@@ -77,14 +77,16 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ inputs.GITHUB_TOKEN }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ inputs.GITHUB_TOKEN }}
           commit-message: 'Automatic PR: Merge changes to main'
-          branch: ${{ github.ref }}
+          branch: ${{ github.ref_name }}
           base: main
-          title: 'Automatic PR from ${{ github.ref }}'
+          title: 'Automatic PR from ${{ github.ref_name }}'
           body: |
-            Este PR foi criado automaticamente pelo fluxo de trabalho de CI para mesclar alterações de ${{ github.ref }} para main.  
+            Este PR foi criado automaticamente pelo fluxo de trabalho de CI para mesclar alterações de ${{ github.ref_name }} para main.  
