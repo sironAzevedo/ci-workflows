@@ -79,19 +79,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create Pull Request
-        run: gh pr create -B main -H ${{ github.ref }} --title "Merge ${{ github.ref }} into main" --body "Created by Github action"
-        env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
-        
-        
-        
-        # uses: peter-evans/create-pull-request@v6
-        # with:
-        #   token: ${{ inputs.GITHUB_TOKEN }}
-        #   commit-message: 'Automatic PR: Merge changes to main'
-        #   branch: ${{ github.head_ref }}
-        #   base: main
-        #   title: 'Automatic PR from ${{ github.head_ref }}'
-        #   body: |
-        #     Este PR foi criado automaticamente pelo fluxo de trabalho de CI para mesclar alterações de ${{ github.head_ref }} para main.  
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ inputs.GITHUB_TOKEN }}
+          commit-message: 'Automatic PR: Merge changes to main'
+          branch: ${{ github.ref }}
+          base: main
+          title: 'Automatic PR from ${{ github.ref }}'
+          body: |
+            Este PR foi criado automaticamente pelo fluxo de trabalho de CI para mesclar alterações de ${{ github.ref }} para main.  
