@@ -77,10 +77,14 @@ jobs:
     steps:
       - name: Set up Git for authentication
         run: |
-          git config --global url."https://${{ inputs.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
+          git remote set-url origin https://x-access-token:${{ inputs.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
 
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ inputs.GITHUB_TOKEN }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
